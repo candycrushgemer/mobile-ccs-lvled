@@ -1,0 +1,853 @@
+<html>
+    <!-- Download stuff -->
+    <head>
+		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+		<style>
+		body {
+			font-family: 'Roboto';font-size: 22px;
+		}
+		</style>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <script type="importmap">
+            {
+                "imports": {
+                    "@material/web/": "https://esm.run/@material/web/"
+                }
+            }
+        </script>
+        <script type="module">
+            import '@material/web/all.js';
+            import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+
+            document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+        </script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <meta name="google-adsense-account" content="ca-pub-3079349038468084">
+        <title>Level Editor</title>
+        <link rel="icon" href="logo.png">
+        <link href="style.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/underscore@1.12.0/underscore-min.js"></script>
+        
+        <meta content="Web Candy Crush Level Editor" property="og:title">
+        <meta content="Level editor for candy crush that can be used to export levels in your browser" property="og:description">
+        <meta content="Candy Crush Level Editor" property="og:site_name">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+		<style>
+		.button {height: 10px;}
+		</style>
+    </head>
+    <body>
+        <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+        <script src="script.js" defer></script>
+
+        <img src="backgrounds/10k_bg.png" id="background" draggable="false"></img>
+
+        <div id="main">
+            <div class="navbar">
+                <div style="display: flex; height: 80%; justify-content: space-between; align-items: center;">
+					<md-filled-tonal-button onclick="exportLevelUI()">Show code</md-filled-tonal-button>
+					<md-icon-button onclick="downloadFile('https://cdn.discordapp.com/attachments/1259403526547832953/1259805725442576494/userguide.pdf?ex=668d0503&is=668bb383&hm=ed19642067284a8a2f620806696ba9fd327147b063164e1f418e1139cfafd404&', 'guide.pdf')" class="mdc-icon-button" aria-label="Help">
+					  <span class="mdc-icon-button__icon material-icons">help</span>
+					</md-icon-button>
+					<script>
+						function downloadFile(url, filename) {
+							const anchorElement = document.createElement('a');
+							anchorElement.href = url;
+							anchorElement.download = filename;
+							anchorElement.click();
+						}
+					</script>
+                </div>
+            </div>
+            <div class="sideselectionright">
+
+                <div class="sidetitle">
+                    <p class='MergePro'; style="font-weight: bold; color: #5e2232; text-align: center;">Level Type:</p>
+                </div>
+
+                <div class="sideoptions" id="modeselection">
+                    <label for="movesoption" class="leveltypelabel" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_moves.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;">Moves</label> -->
+                        <input type="radio" id="movesoption" name="leveltype" value="Classic moves" checked>
+                    </label>
+                    <label class="leveltypelabel" for="jellyoption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_jelly.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;">Jelly</label> -->
+                        <input type="radio" id="jellyoption" name="leveltype" value="Light up">
+                    </label>
+                    <label class="leveltypelabel" for="ingredientsoption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_drop.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;">Ingredients</label> -->
+                        <input type="radio" id="ingredientsoption" name="leveltype" value="Drop down">
+                    </label>
+                    <label class="leveltypelabel" for="orderoption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_order.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;">Order</label> -->
+                        <input type="radio" id="orderoption" name="leveltype" value="Order">
+                    </label>
+                    <label class="leveltypelabel" for="timedoption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_time.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;">Timed</label> -->
+                        <input type="radio" id="timedoption" name="leveltype" value="Classic">
+                    </label>
+                    <label class="leveltypelabel" for="rainbowrapidsoption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_rainbowrapids.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;">Rainbow Rapids</label> -->
+                        <input type="radio" id="rainbowrapidsoption" name="leveltype" value="Rainbow Rapids">
+                    </label>
+                    <label class="leveltypelabel" for="jellyorderoption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_jellyorder.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;">Jelly Order</label> -->
+                        <input type="radio" id="jellyorderoption" name="leveltype" value="Jelly Order">
+                    </label>
+                    <label class="leveltypelabel" for="jellyingredientsoption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_jellydrop.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;">Jelly Ingredients</label> -->
+                        <input type="radio" id="jellyingredientsoption" name="leveltype" value="Jelly Drop down">
+                    </label>
+                    <label class="leveltypelabel" for="orderingredientsoption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_orderdrop.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;">Order Ingredients</label> -->
+                        <input type="radio" id="orderingredientsoption" name="leveltype" value="Order Drop Down">
+                    </label>
+                    <label class="leveltypelabel" for="rainbowjellyoption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_rainbowjelly.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;">Rainbow Rapids Jelly</label> -->
+                        <input type="radio" id="rainbowjellyoption" name="leveltype" value="Rainbow Rapids Jelly">
+                    </label>
+                    <label class="leveltypelabel" for="rainbowingredientsoption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_rainbowdrop.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;">Rainbow Rapids Ingredients</label> -->
+                        <input type="radio" id="rainbowingredientsoption" name="leveltype" value="Rainbow Rapids Drop Down">
+                    </label>
+                    <label class="leveltypelabel" for="rainboworderoption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_rainboworder.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;">Rainbow Rapids Order</label> -->
+                        <input type="radio" id="rainboworderoption" name="leveltype" value="Rainbow Rapids Order">
+                    </label>
+                    <label class="leveltypelabel" for="jellytimeoption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_jellytime.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;"><s>Jelly Time</s></label> -->
+                        <input type="radio" id="jellytimeoption" name="leveltype" value="Jelly Time">
+                    </label>
+                    <label class="leveltypelabel" for="froggeroption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_frogger.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;"><s>Frogger</s></label> -->
+                        <input type="radio" id="froggeroption" name="leveltype" value="Frogger">
+                    </label>
+                    <label class="leveltypelabel" for="jellycoloroption" style="margin: 5px;" onclick="selectMode()">
+                        <img src="ui/playmode_icon_jelly_color.png" style="max-width: 30px; max-height: 30px;">
+                        <div class="break"></div>
+                        <!-- <label class='DroidSans' style="color: #5e2232; text-align: center;"><s>Jelly Color</s></label> -->
+                        <input type="radio" id="jellycoloroption" name="leveltype" value="Jelly Color">
+                    </label>
+                </div>
+                <div class="sideoptions" id="moves-section">
+                    <label for="moves" class='DroidSans' style="margin: 10px; display: block; color: #ffffff; text-align: center;">Moves:</label>
+                    <md-filled-text-field style="width: 100px; height: 50px; text-align: left;" placeholder="20" type="number" name="moves" id="moves" name="moves"></md-filled-text-field><br>
+                </div>
+                <div class="sideoptions" id="time-section" style="display: none;">
+                    <label for="time" class='DroidSans' style="margin: 10px; display: block; color: #ffffff; text-align: center;">Time (seconds):</label>
+                    <md-filled-text-field style="width: 100px; height: 50px; text-align: left;" label="30" type="number" name="time" id="time" name="time"><br>
+					<style>
+					width: 100px;
+					height: 50px;
+					text-align: left;
+					:root {
+						--md-filled-text-field-container-shape: 0px;
+						--md-sys-typescale-body-large: 400 1rem system-ui;
+						--md-sys-color-primary: #FF00EF;
+						--md-sys-color-surface-container-highest: #CFBACD;
+						--md-filled-text-field-label-text-color: #6B0064;
+						--md-fileld-text-field-input-text-color: #000000;
+					}
+					</style>
+                </div>
+
+                <div class="sidetitle">
+                    <p class='MergePro'; style="font-weight: bold; color: #5e2232; text-align: center;">Preffered colors:</p>
+                </div>
+
+                <div class="sideoptions">
+                    <button value="0" class="preferred preferredselected" onclick="togglePreferred(this)">
+                        <img class="selectionimage" src="elements/blue.png">
+                    </button>
+                    <button value="1" class="preferred preferredselected" onclick="togglePreferred(this)">
+                        <img class="selectionimage" src="elements/green.png">
+                    </button>
+                    <button value="2" class="preferred preferredselected" onclick="togglePreferred(this)">
+                        <img class="selectionimage" src="elements/orange.png">
+                    </button>
+                    <button value="3" class="preferred preferredselected" onclick="togglePreferred(this)">
+                        <img class="selectionimage" src="elements/purple.png">
+                    </button>
+                    <button value="4" class="preferred preferredselected" onclick="togglePreferred(this)">
+                        <img class="selectionimage" src="elements/red.png">
+                    </button>
+                    <button value="5" class="preferred" onclick="togglePreferred(this)">
+                        <img class="selectionimage" src="elements/yellow.png">
+                    </button>
+                </div>
+                <div class="sidetitle">
+                    <p class='MergePro break' style="margin: 10px; display: block; color: #5e2232; text-align: center; font-weight: bold; ">Score Targets:</p>
+                </div>
+                <div class="sideoptions">
+                    <img src="ui/hud/hud_scoreStar_red.png" style="max-width: 30px; max-height: 30px;"> 
+                    <p class="DroidSans" style="margin: 10px; display: block; color: #ffffff; text-align: center;">Star 1:</p> 
+                    <input style="width: fit-content; text-align: center;" placeholder="1000" type="number" id="star1">
+                    <div class="break"></div> 
+                    <img src="ui/hud/hud_scoreStar_green.png" style="max-width: 30px; max-height: 30px;"> 
+                    <p class="DroidSans" style="margin: 10px; display: block; color: #ffffff; text-align: center;">Star 2:</p> 
+                    <input style="width: fit-content; text-align: center;" placeholder="2000" type="number" id="star2">
+                    <div class="break"></div> 
+                    <img src="ui/hud/hud_scoreStar_yellow.png" style="max-width: 30px; max-height: 30px;"> 
+                    <p class="DroidSans" style="margin: 10px; display: block; color: #ffffff; text-align: center;">Star 3:</p> 
+                    <input style="width: fit-content; text-align: center;" placeholder="3000" type="number" id="star3">
+                </div>
+                <div class="sideoptions">
+                    <label for="moves" class='DroidSans' style="margin: 10px; display: block; color: #ffffff; text-align: center;">Disable Starting Boosters:</label>
+                    <md-checkbox style="text-align: center;" name="disablebooster" id="disablebooster">
+					<style>
+						:root {
+							/* System tokens */
+							--md-sys-color-primary: #fa41a7
+						}
+					</style>
+                </div>
+
+                <div class="sidetitledream">
+                    <p class='MergePro' style="font-weight: bold; text-align: center; color: #ffffff;">Dreamworld:</p>
+                </div>
+                <div class="sideoptionsdream">
+                    <label for="isOwlModeEnabled" class='DroidSans' style="margin: 10px; display: block; color: #ffffff; text-align: center;">Dreamworld Level</label>
+                    <md-checkbox style="text-align: center;" type="checkbox" name="isOwlModeEnabled" id="isOwlModeEnabled" onchange="toggleDreamworld(this)">
+					<style>
+						:root {
+							/* System tokens */
+							--md-sys-color-primary: #6a00ff;
+						}
+					</style>
+                </div>
+                <div class="sideoptionsdream" id="dreamworldoptions" style="display: none;">
+                    <label for="initialMovesUntilMoonStruck" class='DroidSans' style="margin: 10px; display: block; color: #ffffff; text-align: center;">Moves Until Moonstruck</label>
+                    <input style="margin-left:40%; width: 50px; text-align: center;" type="number" name="initialMovesUntilMoonStruck" id="initialMovesUntilMoonStruck" placeholder="5">
+                    <label for="initialMovesDuringMoonStruck"  class='DroidSans' style="margin: 10px; display: block; color: #ffffff; text-align: center;">Moonstruck Length</label>
+                    <input style="margin-left:40%; width: 50px; text-align: center;" type="number" name="initialMovesDuringMoonStruck" id="initialMovesDuringMoonStruck" placeholder="3">
+                    <label for="maxAllowedScaleDiff"  class='DroidSans' style="margin: 10px; display: block; color: #ffffff; text-align: center;">Max Scale Difference</label>
+                    <input style="margin-left:40%; width: 50px; text-align: center;" type="number" name="maxAllowedScaleDiff" id="maxAllowedScaleDiff" placeholder="10">
+                </div>
+                <div id="requirements-options-section" style="display: none;">
+                    <div class="sidetitle">
+                        <p class='MergePro' style="font-weight: bold; color: #5e2232; text-align: center;">Requirements (sorry for the glitch button):</p>
+                    </div>
+                    <div class="sidetitle" style="display: flex;">
+                        <md-filled-button style="margin-right: auto; margin-left: auto;" onclick="addRequirement()" id="addorder">Add Order</md-filled-button>
+                        <md-filled-button style="margin-right: auto; margin-left: auto;" onclick="addRequirement(true)" id="addingredient">Add Ingredient</md-filled-button>
+                    </div>
+                    <div style="min-height: 40px; display: none;" id="requirementwarning">
+                        <p class='DroidSans' style="font-weight: bold; color: red; text-align: center;">You can only have 3 requirements at a time!</p>
+                    </div>
+                    <div id="requirements">
+                    </div>
+                </div>
+                <div class="sidetitle">
+                    <p class='MergePro' style="font-weight: bold; color: #5e2232; text-align: center;">Candy Cannon:</p>
+                </div>
+                <div class="sideoptions">
+                    <table style="width: 100%;" class="cannonsettings">
+                        <tr>
+                            <td>
+                                <!-- <p class='MergePro' style="font-weight: bold; color: #5e2232; text-align: center;">Amount:</p> -->
+                            </td>
+                            <td>
+                                <p class='MergePro' style="font-weight: bold; color: #ffffff; text-align: center;">Max:</p>
+                            </td>
+                            <td>
+                                <p class='MergePro' style="font-weight: bold; color: #ffffff; text-align: center;">Interval:</p>
+                            </td>
+                            <td>
+                                <p class='MergePro' style="font-weight: bold; color: #ffffff; text-align: center;">Tick:</p>
+                            </td>
+                        </tr>
+                        <tr class="cannonpref" elm="fallingIcing" image="elements/cannon_block_waffle.png" tick="Level"></tr>
+                        <tr class="cannonpref" elm="licorice" image="elements/cannon_licorice.png" tick=""></tr>
+                        <tr class="cannonpref" elm="luckyCandy" image="elements/cannon_lucky.png" tick=""></tr>
+                        <tr class="cannonpref" elm="mysteryCandy" image="elements/cannon_mystery.png" tick=""></tr>
+                        <tr class="cannonpref" elm="mulockCandy" image="elements/cannon_mulock_key.png" tick=""></tr>
+                        <tr class="cannonpref" elm="pepperCandy" image="elements/cannon_bomb.png" tick="ExplosionTurns"></tr>
+                        <tr class="cannonpref" elm="stripedCandy" image="elements/cannon_striped.png" tick=""></tr>
+                        <tr class="cannonpref" elm="stripedRowCandy" image="elements/cannon_striped_horizontal.png" tick=""></tr>
+                        <tr class="cannonpref" elm="stripedColumnCandy" image="elements/cannon_striped_vertical.png" tick=""></tr>
+                        <tr class="cannonpref" elm="timeCandy" image="elements/cannon_time_candy.png" tick=""></tr>
+                        <tr class="cannonpref" elm="extraMoves" image="elements/extra_moves.png" tick=""></tr>
+                        <tr class="cannonpref" elm="wrappedCandy" image="elements/cannon_wrapped_candy.png" tick=""></tr>
+                        <tr class="cannonpref" elm="colorBomb" image="elements/cannon_colorbomb.png" tick=""></tr>
+                        <tr class="cannonpref" elm="fish" image="elements/cannon_fish.png" tick=""></tr>
+                        <tr class="cannonpref" elm="shield" image="elements/cannon_sugar_coat.png" tick="Level"></tr>
+
+                        <tr>
+                            <td> 
+                                <img class="elmimg" style="max-width: 70%;" src="elements/cannon_ingredient.png"> 
+                            </td> 
+                            <td> 
+                                <md-filled-text-field class="max" style="width: 70px; height: 45px; text-align: left;" placeholder="0" type="number" id="maxNumIngredientsOnScreen">
+                             </td> 
+                             <td> 
+                                 <md-filled-text-field class="spawn" style="width: 70px; height: 45px; text-align: left;" placeholder="0" type="number" id="ingredientSpawnDensity"> 
+                                </td> 
+                                <td> 
+                                    <!-- <md-filled-text-field class="tick" style="width: 70px; height: 45px; text-align: left;" placeholder="0" type="number" id="shieldLevel">  -->
+                                </td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                <div id="mixer-options-section" style="display: block;">
+                    <div class="sidetitle">
+                        <p class="MergePro" style="font-weight: bold; color: #5e2232; text-align: center;">Mixer Options:</p>
+                    </div>
+                    <div class="sideoptions">
+                        <p class='DroidSans' style="margin: 10px; display: block; color: #5e2232; text-align: center;">Max Blockers:</p>
+                        <input type="number" style="margin-left: 40%; width: 20%; text-align: center;" id="evilSpawnerAmount" placeholder="0" title="Max Spawned Blockers">
+                        <div class="break"></div>
+                        <p class='DroidSans' style="margin: 10px; display: block; color: #5e2232; text-align: center;">Spawn Interval:</p>
+                        <input type="number" style="margin-left: 40%; width: 20%; text-align: center;"" id="evilSpawnerInterval" placeholder="0" title="Spawn Interval">
+                        <div class="break"></div>
+                        <md-filled-tonal-button onclick="addMixerOption()" id="addmixer">Add Mixer Blocker</md-filled-tonal-button>
+                    </div>
+                    <div id="mixeroptions">
+                    </div>
+                </div>
+            </div>
+
+            <div class="sideselection">
+                <div class="buttons">
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="colordrop">
+                        <div style="display: flex; justify-content: space-between;" class="ripple">
+                            <p class='MergePro' style="padding-left: 5%; ">Colors</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="colordrop" style="display:none">
+                        <button class="colorselected" onclick="updateColor(this, 'random')">
+                            <img class="selectionimage" src="elements/random_ui.png">
+                        </button>
+						<div class="selectcolor" color="red"></div>
+                        <div class="selectcolor" color="yellow"></div>
+                        <div class="selectcolor" color="blue"></div>
+                        <div class="selectcolor" color="green"></div>
+                        <div class="selectcolor" color="orange"></div>
+                        <div class="selectcolor" color="purple"></div>
+                    </div>
+
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="candy">
+                        <div style="display: flex; justify-content: space-between;">
+                            <p class='MergePro' style="padding-left: 5%; ">Candy</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="candy" style="display:none">
+                        <button class="elementselected" onclick="updateSelection(this, 'random', 'normal')">
+                            <img class="selectionimage" src="elements/random.png">
+                        </button>
+                        <div class="selectcoloredelement" element="striped_horizontal"></div>
+                        <div class="selectcoloredelement" element="striped_vertical"></div>
+                        <div class="selectcoloredelement" element="wrapped"></div>
+                        <div class="selectcoloredelement" element="pepper_candy"></div>
+                        <div class="selectcoloredelement" element="key"></div>
+                        <div class="selectcoloredelement" element="lucky"></div>
+                        <div class="selectcoloredelement" element="mystery"></div>
+                        <div class="selectcoloredelement" element="chameleon"></div>
+                        <div class="selectcoloredelement" element="extra_time_and_moves"></div>
+                        <div class="selectcoloredelement" element="jellyfish"></div>
+                        <div class="selectcoloredelement" element="jellyfish_striped"></div>
+                        <div class="selectcoloredelement" element="jellyfish_wrapped"></div>
+                        <div class="selectcoloredelement" element="jellyfish_colorbomb"></div>
+                        <div class="selectelement" element="bomb", gamelayer="normal"></div>
+                        <div class="selectelement" element="coconut_wheel", gamelayer="normal"></div>
+                        <div class="selectelement" element="ufo", gamelayer="normal"></div>
+                    </div>
+
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="frogss">
+                        <div style="display: flex; justify-content: space-between;">
+                            <p class='MergePro' style="padding-left: 5%; ">Frog</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="frogss" style="display:none">
+                        <div class="selectcoloredelement" element="frog"></div>
+                        <div class="selectelement" element="chocolate_frog" gamelayer="normal"></div>
+                        <div class="selectelement" element="leaf" gamelayer="leaf"></div>
+                    </div>
+
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="tiles">
+                        <div style="display: flex; justify-content: space-between;">
+                            <p class='MergePro' style="padding-left: 5%; ">Tiles</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="tiles" style="display:none">
+                        <button onclick="updateSelection(this, 'none', 'tile')">
+                            <img class="selectionimage" src="elements/none_UI.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'empty', 'tile')">
+                            <img class="selectionimage" src="elements/empty_UI.png">
+                        </button>
+                        <div class="selectelement" element="grid" gamelayer="tile"></div>
+                        <div class="selectelement" element="jelly" gamelayer="tile"></div>
+                        <div class="selectelement" element="jelly2" gamelayer="tile"></div>
+                        <div class="selectelement" element="blue_tile" gamelayer="tile"></div>
+                        <div class="selectelement" element="black_tile" gamelayer="tile"></div>
+                    </div>
+
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="blockers">
+                        <div style="display: flex; justify-content: space-between;">
+                            <p class='MergePro' style="padding-left: 5%; ">Blockers</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="blockers" style="display:none">
+                        <div class="selectelement" element="block_frosting" gamelayer="normal"></div>
+                        <div class="selectelement" element="block_multi_frosting1" gamelayer="normal"></div>
+                        <div class="selectelement" element="block_multi_frosting2" gamelayer="normal"></div>
+                        <div class="selectelement" element="block_multi_frosting3" gamelayer="normal"></div>
+                        <div class="selectelement" element="block_multi_frosting4" gamelayer="normal"></div>
+                        <div class="selectelement" element="block_multi_frosting5" gamelayer="normal"></div>
+                        <div class="selectelement" element="bubble_pop_1" gamelayer="normal"></div>
+                        <div class="selectelement" element="bubble_pop_2" gamelayer="normal"></div>
+                        <div class="selectelement" element="bubble_pop_3" gamelayer="normal"></div>
+                        <div class="selectelement" element="bubble_pop_4" gamelayer="normal"></div>
+                        <div class="selectelement" element="bubble_pop_5" gamelayer="normal"></div>
+                        <div class="selectelement" element="block_waffle1" gamelayer="normal"></div>
+                        <div class="selectelement" element="block_waffle2" gamelayer="normal"></div>
+                        <div class="selectelement" element="block_waffle3" gamelayer="normal"></div>
+                        <div class="selectelement" element="block_waffle4" gamelayer="normal"></div>
+                        <div class="selectelement" element="block_waffle5" gamelayer="normal"></div>
+                        <div class="selectelement" element="chain_layer1_c" gamelayer="normal"></div>
+                        <div class="selectelement" element="chain_layer2_c" gamelayer="normal"></div>
+                        <div class="selectelement" element="chain_layer3_c" gamelayer="normal"></div>
+                        <div class="selectelement" element="chain_layer4_c" gamelayer="normal"></div>
+                        <div class="selectelement" element="chain_layer5_c" gamelayer="normal"></div>
+                        <div class="selectelement" element="dark_chocolate_1" gamelayer="normal"></div>
+                        <div class="selectelement" element="dark_chocolate_2" gamelayer="normal"></div>
+                        <div class="selectelement" element="dark_chocolate_3" gamelayer="normal"></div>
+                        <div class="selectelement" element="dark_chocolate_4" gamelayer="normal"></div>
+                        <div class="selectelement" element="dark_chocolate_5" gamelayer="normal"></div>
+                        <div class="selectelement" element="chocolate" gamelayer="normal"></div>
+                        <div class="selectelement" element="licorice_square" gamelayer="normal"></div>
+                        <div class="selectelement" element="bobber", gamelayer="normal"></div>
+                        <div class="selectelement" element="cake_bomb" gamelayer="normal"></div>
+                        <div class="selectelement" element="shell_1" gamelayer="normal"></div>
+                        <div class="selectelement" element="shell_2" gamelayer="normal"></div>
+                        <div class="selectelement" element="shell_3" gamelayer="normal"></div>
+                        <div class="selectelement" element="jelly_jar_1" gamelayer="normal"></div>
+                        <div class="selectelement" element="jelly_jar_2" gamelayer="normal"></div>
+                           <div class="selectelement" element="toffee_tornado" gamelayer="normal"></div>
+                           <div class="selectelement" element="pinata" gamelayer="normal"></div>
+                           <div class="selectelement" element="pinata_crash" gamelayer="normal"></div>
+                           <div class="selectelement" element="pinata_link1" gamelayer="normal"></div>
+                           <div class="selectelement" element="pinata_link2" gamelayer="normal"></div>
+                           <div class="selectelement" element="pinata_link3" gamelayer="normal"></div>
+                           <div class="selectelement" element="pinata_unbreakable" gamelayer="normal"></div>
+                           <div class="selectelement" element="pinata_empty" gamelayer="normal"></div>
+                           <div class="selectelement" element="rainbow_rapid_mold" gamelayer="normal"></div>
+                    </div>
+
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="locks" class="ripple">
+                        <div style="display: flex; justify-content: space-between;">
+                            <p class='MergePro' style="padding-left: 5%; ">Locks</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="locks" style="display:none">
+                        <div class="selectelement" element="licorice" gamelayer="lock"></div>
+                        <div class="selectelement" element="marmalade" gamelayer="lock"></div>
+                        <div class="selectelement" element="sugarcoat_1" gamelayer="sugarcoat"></div>
+                        <div class="selectelement" element="sugarcoat_2" gamelayer="sugarcoat"></div>
+                        <div class="selectelement" element="sugarcoat_3" gamelayer="sugarcoat"></div>
+                        <div class="selectelement" element="mulock1" gamelayer="lock"></div>
+                        <div class="selectelement" element="mulock2" gamelayer="lock"></div>
+                        <div class="selectelement" element="mulock3" gamelayer="lock"></div>
+                        <div class="selectelement" element="mulock4" gamelayer="lock"></div>
+                        <div class="selectelement" element="mulock5" gamelayer="lock"></div>
+                    </div>
+
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="shields" class="ripple">
+                        <div style="display: flex; justify-content: space-between;">
+                            <p class='MergePro' style="padding-left: 5%; ">Shields</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="shields" style="display:none">
+                        <div class="selectelement" element="glass_tile_1" gamelayer="glass"></div>
+                        <div class="selectelement" element="glass_tile_2" gamelayer="glass"></div>
+                        <div class="selectelement" element="glass_tile_3" gamelayer="glass"></div>
+                    </div>
+
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="spawning" class="ripple">
+                        <div style="display: flex; justify-content: space-between;">
+                            <p class='MergePro' style="padding-left: 5%; ">Candy Cannon</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="spawning" style="display:none">
+                        <div class="selectelement" element="candy_cannon" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="candy_entrance" gamelayer="candy_entrance"></div>
+                        <div class="selectelement" element="cannon_striped_horizontal" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_striped_vertical" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_colorbomb" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_fish" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_sugar_coat" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_blue" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_green" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_orange" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_purple" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_red" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_yellow" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_ingredient" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_licorice" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_bomb" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_mulock_key" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_lucky" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_mystery" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_chameleon" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_extra_time_and_moves" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_striped" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_wrapped_candy" gamelayer="candy_cannon"></div>
+                        <div class="selectelement" element="cannon_block_waffle" gamelayer="candy_cannon"></div>
+                    </div>
+
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="ingredients" class="ripple">
+                        <div style="display: flex; justify-content: space-between;">
+                            <p class='MergePro' style="padding-left: 5%; ">Ingredients</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="ingredients" style="display:none">
+                        <div class="selectelement" element="cherry" gamelayer="normal"></div>
+                        <div class="selectelement" element="hazelnut" gamelayer="normal"></div>
+                        <div class="selectelement" element="ingredients_exit" gamelayer="ingredients_exit"></div>
+                    </div>
+
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="mixers" class="ripple">
+                        <div style="display: flex; justify-content: space-between;">
+                            <p class='MergePro' style="padding-left: 5%; ">Mixers</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="mixers" style="display:none">
+                        <div class="selectelement" element="chocolate_spawner" gamelayer="normal"></div>
+                        <div class="selectelement" element="dark_chocolate_spawner_1" gamelayer="normal"></div>
+                        <div class="selectelement" element="dark_chocolate_spawner_2" gamelayer="normal"></div>
+                        <div class="selectelement" element="dark_chocolate_spawner_3" gamelayer="normal"></div>
+                        <div class="selectelement" element="magic_mixer" gamelayer="normal"></div>
+                    </div>
+
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="walls" class="ripple">
+                        <div style="display: flex; justify-content: space-between;">
+                            <p class='MergePro' style="padding-left: 5%; ">Walls</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="walls" style="display:none">
+                        <button onclick="updateSelection(this, 'wall_down', 'walldown')" class="">
+                            <img class="selectionimage" src="elements/wall_down_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'wall_up', 'wallup')" class="">
+                            <img class="selectionimage" src="elements/wall_up_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'wall_left', 'wallleft')" class="">
+                            <img class="selectionimage" src="elements/wall_left_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'wall_right', 'wallright')" class="">
+                            <img class="selectionimage" src="elements/wall_right_ui.png">
+                        </button>
+
+
+                        <button onclick="updateSelection(this, 'destructible_wall_1_down', 'walldown')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_1_down_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_1_up', 'wallup')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_1_up_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_1_left', 'wallleft')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_1_left_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_1_right', 'wallright')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_1_right_ui.png">
+                        </button>
+
+
+                        <button onclick="updateSelection(this, 'destructible_wall_2_down', 'walldown')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_2_down_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_2_up', 'wallup')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_2_up_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_2_left', 'wallleft')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_2_left_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_2_right', 'wallright')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_2_right_ui.png">
+                        </button>
+
+
+                        <button onclick="updateSelection(this, 'destructible_wall_3_down', 'walldown')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_3_down_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_3_up', 'wallup')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_3_up_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_3_left', 'wallleft')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_3_left_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_3_right', 'wallright')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_3_right_ui.png">
+                        </button>
+                        
+
+                        <button onclick="updateSelection(this, 'licorice_wall_down', 'walldown')" class="">
+                            <img class="selectionimage" src="elements/licorice_wall_down_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'licorice_wall_up', 'wallup')" class="">
+                            <img class="selectionimage" src="elements/licorice_wall_up_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'licorice_wall_left', 'wallleft')" class="">
+                            <img class="selectionimage" src="elements/licorice_wall_left_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'licorice_wall_right', 'wallright')" class="">
+                            <img class="selectionimage" src="elements/licorice_wall_right_ui.png">
+                        </button>
+
+
+                        <button onclick="updateSelection(this, 'destructible_wall_lic_1_down', 'walldown')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_lic_1_down_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_lic_1_up', 'wallup')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_lic_1_up_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_lic_1_left', 'wallleft')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_lic_1_left_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_lic_1_right', 'wallright')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_lic_1_right_ui.png">
+                        </button>
+
+
+                        <button onclick="updateSelection(this, 'destructible_wall_lic_2_down', 'walldown')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_lic_2_down_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_lic_2_up', 'wallup')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_lic_2_up_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_lic_2_left', 'wallleft')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_lic_2_left_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_lic_2_right', 'wallright')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_lic_2_right_ui.png">
+                        </button>
+
+
+                        <button onclick="updateSelection(this, 'destructible_wall_lic_3_down', 'walldown')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_lic_3_down_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_lic_3_up', 'wallup')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_lic_3_up_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_lic_3_left', 'wallleft')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_lic_3_left_ui.png">
+                        </button>
+                        <button onclick="updateSelection(this, 'destructible_wall_lic_3_right', 'wallright')" class="">
+                            <img class="selectionimage" src="elements/destructible_wall_lic_3_right_ui.png">
+                        </button>
+                    </div>
+                        
+
+
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="bonbon"  class="ripple">
+                        <div style="display: flex; justify-content: space-between;">
+                            <p class='MergePro' style="padding-left: 5%; ">Bon Bon Blitz</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="bonbon" style="display:none">
+                        <div class="selectelement" element="bonbon_colorbomb_1" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_colorbomb_2" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_colorbomb_3" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_colorbomb_4" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_horizontal_1" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_horizontal_2" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_horizontal_3" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_horizontal_4" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_vertical_1" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_vertical_2" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_vertical_3" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_vertical_4" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_fish_1" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_fish_2" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_fish_3" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_fish_4" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_wrapped_1" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_wrapped_2" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_wrapped_3" gamelayer="normal"></div>
+                        <div class="selectelement" element="bonbon_wrapped_4" gamelayer="normal"></div>
+                    </div>
+
+                    <button class="dropdown" onclick="toggleDropdown(this)" associd="path">
+                        <div style="display: flex; justify-content: space-between;">
+                            <p class='MergePro' style="padding-left: 5%; ">Rainbow Rapid Paths</p>
+                            <p class="arrow">▼</p>
+                          </div>
+                    </button>
+                    <div class="dropped" id="path" style="display:none">
+                        <div class="selectelement" element="rainbow_rapid_cannon_top" gamelayer="rainbow_cannon_top"></div>
+                        <div class="selectelement" element="rainbow_rapid_cannon_bottom" gamelayer="rainbow_cannon_bottom"></div>
+                        <div class="selectelement" element="rainbow_rapid_cannon_left" gamelayer="rainbow_cannon_left"></div>
+                        <div class="selectelement" element="rainbow_rapid_cannon_right" gamelayer="rainbow_cannon_right"></div>
+                        <div class="selectelement" element="rainbow_stream_vertical" gamelayer="path"></div>
+                        <div class="selectelement" element="rainbow_stream_horizontal" gamelayer="path"></div>
+                        <div class="selectelement" element="rainbow_stream_BL" gamelayer="path"></div>
+                        <div class="selectelement" element="rainbow_stream_BR" gamelayer="path"></div>
+                        <div class="selectelement" element="rainbow_stream_TL" gamelayer="path"></div>
+                        <div class="selectelement" element="rainbow_stream_TR" gamelayer="path"></div>
+                        <div class="selectelement" element="rainbow_stream_TBL" gamelayer="path"></div>
+                        <div class="selectelement" element="rainbow_stream_TBR" gamelayer="path"></div>
+                        <div class="selectelement" element="rainbow_stream_TLR" gamelayer="path"></div>
+                        <div class="selectelement" element="rainbow_stream_BLR" gamelayer="path"></div>
+                        <div class="selectelement" element="rainbow_stream_all_directions" gamelayer="path"></div>
+                        <div class="selectelement" element="rainbow_stream_intersection_point" gamelayer="path"></div>
+                        
+                    </div>
+					<p class="Roboto">Change background image:</p>
+					<md-filled-select width="20px">
+						<md-select-option selected value="blank">
+							<div slot="headline">None</div>
+						</md-select-option>
+						<md-select-option onclick="changeBg()" value="10k_bg">
+							<div slot="headline">10K Celebrate</div>
+						</md-select-option>
+						<md-select-option value="w1_bg">
+							<div slot="headline" onclick="changeBg()">CC solitaire theme</div>
+						</md-select-option>
+						<md-select-option value="champrace_bg">
+							<div slot="headline" onclick="changeBg()">Champrace</div>
+						</md-select-option>
+						<md-select-option value="RM_w1_bg">
+							<div slot="headline" onclick="changeBg()">CCS Ep1</div>
+						</md-select-option>
+						<md-select-option value="RM_w2_bg">
+							<div onclick="changeBg()" slot="headline">CCS Ep2</div>
+						</md-select-option>
+					</md-filled-select>
+					<script>
+						function changeBg(selectElement) {
+							const imageElement = document.querySelector('<img src="backgrounds/10k_bg.png" id="background" draggable="false"></img>'); // Replace with your image element selector
+							const selectedValue = selectElement.value;
+    
+							if (selectedValue === '10k_bg') {
+									imageElement.src = 'background/10k_bg.png';
+							} else if (selectedValue === 'w1_bg') { // Add additional options if needed
+								imageElement.src = 'background/w1_bg.png';
+							} else if (selectedValue === 'RM_w2_bg') {
+								imageElement.src = 'background/RM_w2_bg.png';
+							}
+						}
+					</script>
+					<style>
+					:root {
+						--md-outlined-select-text-field-outline-color: #ff008c;
+						--md-outlined-select-text-field-input-text-color: #ffffff;
+						--md-outlined-select-background-color: #ffffff;
+					}
+					
+					md-outlined-select::part(menu) {
+						--md-menu-container-color: #fbf4f6;
+					}
+					</style>
+                </div>
+            </div>
+
+            <div class="vertical-center" width="100px" style="top:56%">
+                <table id="level" cellspacing="0"></table>
+            </div>
+        </div>
+
+        <div id="exportmenu" style="display: none; width: 520px; height: 1200px;">
+            <div class="popup" style="background-color: rgb(255, 255, 255); width: fit-content; height: fit-content;">
+                <md-icon-button onclick="document.getElementById('exportmenu').style.display = 'none'" style="position: absolute; right: 20; top: 20; border-radius: 10px; background-color: rgb(255, 255, 255); width: 30px; height: 30px"><md-icon>×</md-icon></md-icon-button>
+                <label for="exportfield" class='MergePro' style="margin: 0; width: 50%; height: 20px; border-radius: 10px; padding: 0; display: block; color: #000000; text-align: center;">Export Successfully!</label>
+                <md-outlined-text-field type="textarea" id="exportfield" name="exportfield" style="--md-sys-color-primary: #ff006a; --md-outlined-text-field-label-text-color: #000000; --md-outlined-text-field-input-text-color: #000000; width: 550px; height: 500px; resize: vertical; color: #ffffff;" label="Export" readonly></md-outlined-text-field>
+				<md-filled-button style="--md-sys-color-primary: #ff00b3;" onclick="saveText()">Save</md-filled-button>
+				<script>
+				    function saveText() {
+						const textField = document.getElementById('exportfield');
+						const text = textField.value;
+						const blob = new Blob([text], { type: 'text/plain' });
+						const url = window.URL.createObjectURL(blob);
+						const link = document.createElement('a');
+						link.href = url;
+						link.download = 'exported_data.txt';
+						link.click();
+					}
+				</script>
+            </div>
+        </div>
+        <div id="importmenu" style="display: none;">
+            <div class="popup" style="width: 30%; left: 35%; background-color: rgb(255, 255, 255);">
+                <md-icon-button onclick="document.getElementById('importmenu').style.display = 'none'" style="position: absolute; right: 20; top: 20; border-radius: 10px; width: 30px; height: 30px"><md-icon>×</md-icon></md-icon-button>
+                <label for="importfield" class='MergePro' style="margin: 0; width: 50%; height: 20px; border-radius: 10px; padding:0; display: block; color: #000000; text-align: center;">Type In Level Code:</label>
+                <div class="break"></div>
+                <md-outlined-text-field label="Level Code" type="textarea" id="importfield" name="importfield" style="--md-sys-color-primary: #ff006a; --md-outlined-text-field-label-text-color: #000000; --md-outlined-text-field-input-text-color: #000000; height: 200px; width: 450px; resize: none;"></md-outlined-text-field>
+                <div class="break"></div>
+                <md-filled-tonal-button onclick="importLevelUI()" style="border-radius: 5px; background-color: rgb(174, 174, 174); width: 30%; font-size: 1.1em;">Import Level</md-filled-tonal-button>
+                <div class="break"></div>
+                <p class="MergePro" id="importerror" style="color: red; display: none; width: fit-content; height: fit-content;">Error while reading data! Please check!</p>
+            </div>
+        </div>
+        <div id="creditsmenu" style="display: none;">
+            <div class="popup" style="height: 70%; background-color: rgb(255, 255, 255);">
+                <md-icon-button onclick="document.getElementById('creditsmenu').style.display = 'none'" style="position: absolute; right: 20; top: 20; border-radius: 10px; width: 30px; height: 30px"><md-icon>×</md-icon></md-icon-button>
+                <p class="Roboto" style="margin: 0; width: 50%; height: 20px; border-radius: 10px; padding: 0; display: block; color: #000000; text-align: center;">About Level Editor</p>
+                <p class="Roboto" style="color: red; width: fit-content; height: fit-content; text-align: center;">Copyright (c) 2024. King Limited<br>If they choose this editor as their editor, this site may be taken down at any time.</p>
+                <p class="Roboto" style="color: #000000; width: 80%; text-align: center; vertical-align: middle; background-color: #e3e3e3; border-radius: 10px; display: inline-block;"><br>Welcome to Candy Crush Saga Level Editor! This is a free software, just enjoy using it! But, you use this software as mean as you agree to credit:<br><br>Blakiemon, candycrushgemer, Fence<br><br>Version 1.4 (104072024), made with ❤️ by Blakiemon</p>
+                <div class="break"></div>
+                <div class="break"></div>
+                <p style="color: #001eff; width: 80%; text-align: center;">If you have any problem, please send to us at Discord server. Don't say hello, just say your problem!</p>
+                <md-filled-tonal-button onclick="window.open('https://discord.gg/37ND6RwjXM')"><img style="max-width: 16px;" src="data:image/jpeg;base64,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
+">Editor Support Server</md-filled-tonal-button>
+                <div class="break"></div>
+            </div>
+		</div>
+			<div id="settings" style="display: none;">
+				<div class="popup" style="height: 70%; background-color: rgb(255, 255, 255);">
+					<p class="Roboto" style="margin: 0; width: 50%; height: 20px; border-radius: 10px; padding: 0; display: block; color: #000000; text-align: center;">Settings</p>
+					<md-icon-button style="position: absolute; right: 20; top: 20; border-radius: 10px; width: 30px; height: 30px"><md-icon>×</md-icon></md-icon-button>
+					<p class="Roboto" style="margin: 0; width: 50%; height: 20px; border-radius: 10px; padding: 0; display: block; color: #000000; text-align: center;">Change background theme:</p>
+					<img src="background/10k_bg.png" alt="Background1" width="64" height="64">
+        </div>
+    </body>
